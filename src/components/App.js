@@ -64,7 +64,7 @@ export class App extends Component {
     return (
       <div>
         <h1>Phone book</h1>
-        <UserForm initialValue={this.state} handleSubmit={this.addContact} />
+        <UserForm handleSubmit={this.addContact} />
         <h2>Contacts</h2>
         <Filter value={filter} changeFilter={this.changeFilter} />
         <ListContact

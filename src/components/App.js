@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
 import { GlobalStyle } from './GlobalStyle';
-import { ListContact } from './ListContact';
-import { UserForm } from './UserForm';
+import { ListContact } from './ListContact/ListContact';
+import { UserForm } from './UserForm/UserForm';
 import { Filter } from './FilterContact';
 
 const initialValue = {
@@ -12,37 +12,32 @@ const initialValue = {
     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
     { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
   ],
-  name: '',
-  number: '',
   filter: '',
 };
 
 export class App extends Component {
   state = { ...initialValue };
 
-  handleSubmit = (values, { resetForm }) => {
-    const { name, number } = values;
+  addContact = ({ name, number }) => {
     const { contacts } = this.state;
     const isContact = contacts.some(
-      contact => contact.name === name && contact.number === number
+      contact =>
+        contact.name.toLowerCase() === name.toLowerCase() ||
+        contact.number === number
     );
 
     if (isContact) {
       alert(`${name} already exists.`);
-      resetForm();
       return;
     }
     const newContact = {
-      name: values.name,
-      number: values.number,
+      name,
+      number,
       id: nanoid(),
     };
     this.setState(prevState => ({
       contacts: [...prevState.contacts, newContact],
-      name: '',
-      number: '',
     }));
-    resetForm();
   };
 
   changeFilter = e => {
@@ -69,7 +64,7 @@ export class App extends Component {
     return (
       <div>
         <h1>Phone book</h1>
-        <UserForm initialValue={this.state} handleSubmit={this.handleSubmit} />
+        <UserForm initialValue={this.state} handleSubmit={this.addContact} />
         <h2>Contacts</h2>
         <Filter value={filter} changeFilter={this.changeFilter} />
         <ListContact

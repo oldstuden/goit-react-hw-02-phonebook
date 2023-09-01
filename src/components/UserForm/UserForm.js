@@ -24,13 +24,23 @@ const schema = yup.object().shape({
     )
     .required(),
 });
-export const UserForm = ({ initialValue, handleSubmit }) => {
+
+const initialValue = {
+  name: '',
+  number: '',
+};
+
+export const UserForm = ({ handleSubmit }) => {
+  const onSubmit = (values, { resetForm }) => {
+    handleSubmit({ ...values });
+    resetForm();
+  };
   return (
     <div>
       <Wrap
         initialValues={initialValue}
         validationSchema={schema}
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
       >
         <ContactForm>
           <LabelForm htmlFor="name">
